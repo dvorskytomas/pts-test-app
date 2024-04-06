@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      test-app: web
+  template:
+    metadata:
+      labels:
+        test-app: web
+    spec:
+      containers:
+        - name: test-app
+          image: pts/test-app:latest
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-app-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    test-app: web
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
